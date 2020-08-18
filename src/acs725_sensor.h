@@ -14,9 +14,9 @@
 class acs725_sensor
 {
 public:
-  acs725_sensor();
+  acs725_sensor(int adc_bits);
 
-  void begin(int adc_bits);
+  void begin();
   float getCurrent(int rawSensorVal);
 
 private:
