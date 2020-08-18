@@ -7,30 +7,22 @@
 #include "Particle.h"
 
 
-#define SENSOR_AVERAGE          500
+#define SENSOR_AVERAGE              50
+#define DEVICE_VOLTAGE_REFERENCE    3.3
 
 // This is your main class that users will import into their application
 class acs725_sensor
 {
 public:
-  /**
-   * Constructor
-   */
   acs725_sensor();
 
-  /**
-   * Example method
-   */
-  void begin();
-
-  /**
-   * Example method
-   */
-  void process();
+  void begin(int adc_bits);
+  float getCurrent(int rawSensorVal);
 
 private:
-  /**
-   * Example private method
-   */
-  void doit();
+  int sensor_value;
+  float sensor_sensitivity;
+  float Vref;
+  int _adcBits;
+  int _loopCount;
 };

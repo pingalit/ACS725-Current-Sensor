@@ -11,29 +11,32 @@ acs725_sensor::acs725_sensor()
   // be sure not to call anything that requires hardware be initialized here, put those in begin()
 }
 
-/**
- * Example method.
- */
-void acs725_sensor::begin()
+void acs725_sensor::begin(int adc_bits)
 {
     // initialize hardware
-    
+    sensor_value = 0;
+    sensor_sensitivity = 0;
+    Vref = 322;
+    _adcBits = adc_bits;
+    _loopCount = 0;
 }
 
-/**
- * Example method.
- */
-void acs725_sensor::process()
-{
-    // do something useful
-    Serial.println("called process");
-    doit();
-}
 
-/**
-* Example private method
-*/
-void acs725_sensor::doit()
+float acs725_sensor::getCurrent(int rawSensorVal)
 {
-    Serial.println("called doit");
+    int _rawSensorVal = rawSensorVal;
+    if(_loopCount < SENSOR_AVERAGE)
+    {
+        sensor_value += _rawSensorVal;
+    }
+    else
+    {
+        sensor_value = sensor_value/SENSOR_AVERAGE;
+        float unitValue = DEVICE_VOLTAGE_REFERENCE/_adcBits;
+        float voltage = unitValue*sensor_value;
+        float current = (voltage - Vref) * sensor_sensitivity;
+        _loopCount = 0;
+        return current;
+    }
+    _loopCount++;
 }
